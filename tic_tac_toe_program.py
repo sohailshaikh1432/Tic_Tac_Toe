@@ -45,9 +45,28 @@ def who_goes_first():
         return 'player'
 
 
+def get_player_move(board):
+    # Let the player type in their move.
+    move = ' '
+    while move not in '1 2 3 4 5 6 7 8 9'.split() or not isSpaceFree(board, int(move)):
+        print('What is your next move? (1-9)')
+        move = input()
+    return int(move)
+
+
+def make_move(board, letter, move):
+    board[move] = letter
+
+
 # Reset the board
 the_board = [' '] * 10
 player_letter, computer_letter = input_payer_letter()
 turn = who_goes_first()
 print('The ' + turn + ' will go first.')
 game_is_playing = True
+while game_is_playing:
+    if turn == 'player':
+        # player's turn
+        drawBoard(the_board)
+        move = get_player_move(the_board)
+        make_move(the_board, player_letter, move)
