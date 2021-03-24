@@ -48,7 +48,7 @@ def who_goes_first():
 def get_player_move(board):
     # Let the player type in their move.
     move = ' '
-    while move not in '1 2 3 4 5 6 7 8 9'.split() or not isSpaceFree(board, int(move)):
+    while move not in '1 2 3 4 5 6 7 8 9'.split() or not is_space_free(board, int(move)):
         print('What is your next move? (1-9)')
         move = input()
     return int(move)
@@ -71,6 +71,84 @@ def is_winner(bo, le):
             (bo[9] == le and bo[5] == le and bo[1] == le))  # diagonal
 
 
+def is_board_full(board):
+    # Return True if every space on the board has been taken. Otherwise return False.
+    for i in range(1, 10):
+    if is_space_free(board, i):
+        return False
+    return True
+
+def is_space_free(board, move):
+    # Return true if the passed move is free on the passed board.
+    return board[move] == ' '
+
+
+def get_player_move(board):
+    # Let the player type in their move.
+    move = ' '
+    while move not in '1 2 3 4 5 6 7 8 9'.split() or not is_space_free(board, int(move)):
+        print('What is your next move? (1-9)')
+        move = input()
+    return int(move)
+
+def choose_random_move_from_list(board, moves_list):
+    # Returns a valid move from the passed list on the passed board.
+    # Returns None if there is no valid move.
+    possible_moves = []
+    for i in moves_list:
+        if is_space_free(board, i):
+            possible_moves.append(i)
+
+        if len(possible_moves) != 0:
+            return random.choice(possible_moves)
+        else:
+            return None
+
+def get_computer_move(board, computer_letter):
+    # Given a board and the computer's letter, determine where to move and return that move.
+    if computer_letter == 'X':
+        player_letter = 'O'
+    else:
+        player_letter = 'X'
+
+    # Here is our algorithm for our Tic Tac Toe AI:
+    # First, check if we can win in the next move
+    for i in range(1, 10):
+        copy = get_board_copy(board)
+        if is_space_free(copy, i):
+            make_move(copy, computer_letter, i)
+            if is_winner(copy, computer_letter):
+                return i
+
+    # Check if the player could win on their next move, and block them.
+    for i in range(1, 10):
+        copy = get_board_copy(board)
+        if is_space_free(copy, i):
+            make_move(copy, player_letter, i)
+            if is_winner(copy, player_letter):
+                return i
+
+    move = choose_random_move_from_list(board, [1, 3, 7, 9])
+    if move != None:
+        return move
+
+    # Try to take the center, if it is free.
+    if is_space_free(board, 5):
+        return 5
+
+    # Move on one of the sides.
+    return choose_random_move_from_list(board, [2, 4, 6, 8])
+
+
+def get_board_copy(board):
+    # Make a duplicate of the board list and return it the duplicate.
+    dupe_board = []
+    for i in board:
+        dupe_board.append(i)
+
+    return dupe_board
+
+
 print('Welcome to Tic Tac Toe!')
 # Reset the board
 the_board = [' '] * 10
@@ -89,7 +167,7 @@ while game_is_playing:
             print('Hooray! You have won the game!')
             game_is_playing = False
         else:
-            if isBoardFull(the_board):
+            if is_board_full(the_board):
                 draw_board(the_board)
                 print('The game is a tie!')
                 break
@@ -97,14 +175,14 @@ while game_is_playing:
                 turn = 'computer'
     else:
         # Computer’s turn.
-        move = getComputerMove(the_board, computerLetter)
-        makeMove(the_board, computerLetter, move)
-        if is_winner(the_board, computerLetter):
+        move = get_computer_move(the_board, computer_letter)
+        make_move(the_board, computer_letter, move)
+        if is_winner(the_board, computer_letter):
             draw_board(the_board)
             print('The computer has beaten you! You lose.')
             game_is_playing = False
         else:
-            if isBoardFull(the_board):
+            if is_board_full(the_board):
                 draw_board(the_board)
                 print('The game is a tie!')
                 break
