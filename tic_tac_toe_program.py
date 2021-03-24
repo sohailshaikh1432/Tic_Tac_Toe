@@ -37,8 +37,17 @@ def input_payer_letter():
         return ['O', 'X']
 
 
+def who_goes_first():
+    # Randomly choose the player who goes first.
+    if random.randint(0, 1) == 0:
+        return 'computer'
+    else:
+        return 'player'
+
+
 # Reset the board
-theBoard = [' '] * 10
+the_board = [' '] * 10
 player_letter, computer_letter = input_payer_letter()
-
-
+turn = who_goes_first()
+print('The ' + turn + ' will go first.')
+game_is_playing = True
