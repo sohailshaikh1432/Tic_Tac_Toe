@@ -8,15 +8,10 @@ def draw_board(board):
     :param board:
     :return:
     """
-    print('   |   |')
     print(' ' + board[7] + ' | ' + board[8] + ' | ' + board[9])
-    print('   |   |')
     print('-----------')
-    print('   |   |')
     print(' ' + board[4] + ' | ' + board[5] + ' | ' + board[6])
-    print('   |   |')
     print('-----------')
-    print('   |   |')
     print(' ' + board[1] + ' | ' + board[2] + ' | ' + board[3])
 
 
@@ -74,9 +69,10 @@ def is_winner(bo, le):
 def is_board_full(board):
     # Return True if every space on the board has been taken. Otherwise return False.
     for i in range(1, 10):
-    if is_space_free(board, i):
-        return False
+        if is_space_free(board, i):
+            return False
     return True
+
 
 def is_space_free(board, move):
     # Return true if the passed move is free on the passed board.
@@ -91,6 +87,7 @@ def get_player_move(board):
         move = input()
     return int(move)
 
+
 def choose_random_move_from_list(board, moves_list):
     # Returns a valid move from the passed list on the passed board.
     # Returns None if there is no valid move.
@@ -103,6 +100,7 @@ def choose_random_move_from_list(board, moves_list):
             return random.choice(possible_moves)
         else:
             return None
+
 
 def get_computer_move(board, computer_letter):
     # Given a board and the computer's letter, determine where to move and return that move.
@@ -149,42 +147,52 @@ def get_board_copy(board):
     return dupe_board
 
 
-print('Welcome to Tic Tac Toe!')
-# Reset the board
-the_board = [' '] * 10
-player_letter, computer_letter = input_payer_letter()
-turn = who_goes_first()
-print('The ' + turn + ' will go first.')
-game_is_playing = True
-while game_is_playing:
-    if turn == 'player':
-        # Player's turn
-        draw_board(the_board)
-        move = get_player_move(the_board)
-        make_move(the_board, player_letter, move)
-        if is_winner(the_board, player_letter):
+def play_again():
+    # This function returns True if the player wants to play again, otherwise it returns False.
+    print('Do you want to play again? (yes or no)')
+    return input().lower().startswith('y')
+
+
+while True:
+    print('Welcome to Tic Tac Toe!')
+    # Reset the board
+    the_board = [' '] * 10
+    player_letter, computer_letter = input_payer_letter()
+    turn = who_goes_first()
+    print('The ' + turn + ' will go first.')
+    game_is_playing = True
+    while game_is_playing:
+        if turn == 'player':
+            # Player's turn
             draw_board(the_board)
-            print('Hooray! You have won the game!')
-            game_is_playing = False
-        else:
-            if is_board_full(the_board):
+            move = get_player_move(the_board)
+            make_move(the_board, player_letter, move)
+            if is_winner(the_board, player_letter):
                 draw_board(the_board)
-                print('The game is a tie!')
-                break
+                print('Hooray! You have won the game!')
+                game_is_playing = False
             else:
-                turn = 'computer'
-    else:
-        # Computer’s turn.
-        move = get_computer_move(the_board, computer_letter)
-        make_move(the_board, computer_letter, move)
-        if is_winner(the_board, computer_letter):
-            draw_board(the_board)
-            print('The computer has beaten you! You lose.')
-            game_is_playing = False
+                if is_board_full(the_board):
+                    draw_board(the_board)
+                    print('The game is a tie!')
+                    break
+                else:
+                    turn = 'computer'
         else:
-            if is_board_full(the_board):
+            # Computer’s turn.
+            move = get_computer_move(the_board, computer_letter)
+            make_move(the_board, computer_letter, move)
+            if is_winner(the_board, computer_letter):
                 draw_board(the_board)
-                print('The game is a tie!')
-                break
+                print('The computer has beaten you! You lose.')
+                game_is_playing = False
             else:
-                turn = 'player'
+                if is_board_full(the_board):
+                    draw_board(the_board)
+                    print('The game is a tie!')
+                    break
+                else:
+                    turn = 'player'
+
+    if not play_again():
+        break
