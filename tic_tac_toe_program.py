@@ -1,7 +1,7 @@
 import random
 
 
-def drawBoard(board):
+def draw_board(board):
     """
     This function prints out the board that it was passed.
     "board" is a list of 10 strings representing the board (ignore index 0)
@@ -58,6 +58,20 @@ def make_move(board, letter, move):
     board[move] = letter
 
 
+def is_winner(bo, le):
+    # Given a board and a player’s letter, this function returns True if that player has won.
+    # We use bo instead of board and le instead of letter so we don’t have to type as much.
+    return ((bo[7] == le and bo[8] == le and bo[9] == le) or  # across the top
+            (bo[4] == le and bo[5] == le and bo[6] == le) or  # across the middle
+            (bo[1] == le and bo[2] == le and bo[3] == le) or  # across the bottom
+            (bo[7] == le and bo[4] == le and bo[1] == le) or  # down the left side
+            (bo[8] == le and bo[5] == le and bo[2] == le) or  # down the middle
+            (bo[9] == le and bo[6] == le and bo[3] == le) or  # down the right side
+            (bo[7] == le and bo[5] == le and bo[3] == le) or  # diagonal
+            (bo[9] == le and bo[5] == le and bo[1] == le))  # diagonal
+
+
+print('Welcome to Tic Tac Toe!')
 # Reset the board
 the_board = [' '] * 10
 player_letter, computer_letter = input_payer_letter()
@@ -66,7 +80,33 @@ print('The ' + turn + ' will go first.')
 game_is_playing = True
 while game_is_playing:
     if turn == 'player':
-        # player's turn
-        drawBoard(the_board)
+        # Player's turn
+        draw_board(the_board)
         move = get_player_move(the_board)
         make_move(the_board, player_letter, move)
+        if is_winner(the_board, player_letter):
+            draw_board(the_board)
+            print('Hooray! You have won the game!')
+            game_is_playing = False
+        else:
+            if isBoardFull(the_board):
+                draw_board(the_board)
+                print('The game is a tie!')
+                break
+            else:
+                turn = 'computer'
+    else:
+        # Computer’s turn.
+        move = getComputerMove(the_board, computerLetter)
+        makeMove(the_board, computerLetter, move)
+        if is_winner(the_board, computerLetter):
+            draw_board(the_board)
+            print('The computer has beaten you! You lose.')
+            game_is_playing = False
+        else:
+            if isBoardFull(the_board):
+                draw_board(the_board)
+                print('The game is a tie!')
+                break
+            else:
+                turn = 'player'
