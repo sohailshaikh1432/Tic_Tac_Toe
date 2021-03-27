@@ -8,11 +8,11 @@ def draw_board(board):
     :param board:
     :return:
     """
-    print(' ' + board[7] + ' | ' + board[8] + ' | ' + board[9])
-    print('-----------')
-    print(' ' + board[4] + ' | ' + board[5] + ' | ' + board[6])
-    print('-----------')
-    print(' ' + board[1] + ' | ' + board[2] + ' | ' + board[3])
+    print(' 7' + board[7] + ' | 8' + board[8] + ' | 9' + board[9])
+    print('-------------')
+    print(' 4' + board[4] + ' | 5' + board[5] + ' | 6' + board[6])
+    print('-------------')
+    print(' 1' + board[1] + ' | 2' + board[2] + ' | 3' + board[3])
 
 
 def input_payer_letter():
@@ -68,8 +68,8 @@ def is_winner(bo, le):
 
 def is_board_full(board):
     # Return True if every space on the board has been taken. Otherwise return False.
-    for i in range(1, 10):
-        if is_space_free(board, i):
+    for index in range(1, 10):
+        if is_space_free(board, index):
             return False
     return True
 
@@ -92,9 +92,9 @@ def choose_random_move_from_list(board, moves_list):
     # Returns a valid move from the passed list on the passed board.
     # Returns None if there is no valid move.
     possible_moves = []
-    for i in moves_list:
-        if is_space_free(board, i):
-            possible_moves.append(i)
+    for index in moves_list:
+        if is_space_free(board, index):
+            possible_moves.append(index)
 
         if len(possible_moves) != 0:
             return random.choice(possible_moves)
@@ -111,20 +111,20 @@ def get_computer_move(board, computer_letter):
 
     # Here is our algorithm for our Tic Tac Toe AI:
     # First, check if we can win in the next move
-    for i in range(1, 10):
+    for index in range(1, 10):
         copy = get_board_copy(board)
-        if is_space_free(copy, i):
-            make_move(copy, computer_letter, i)
+        if is_space_free(copy, index):
+            make_move(copy, computer_letter, index)
             if is_winner(copy, computer_letter):
-                return i
+                return index
 
     # Check if the player could win on their next move, and block them.
-    for i in range(1, 10):
+    for index in range(1, 10):
         copy = get_board_copy(board)
-        if is_space_free(copy, i):
-            make_move(copy, player_letter, i)
+        if is_space_free(copy, index):
+            make_move(copy, player_letter, index)
             if is_winner(copy, player_letter):
-                return i
+                return index
 
     move = choose_random_move_from_list(board, [1, 3, 7, 9])
     if move != None:
@@ -141,8 +141,8 @@ def get_computer_move(board, computer_letter):
 def get_board_copy(board):
     # Make a duplicate of the board list and return it the duplicate.
     dupe_board = []
-    for i in board:
-        dupe_board.append(i)
+    for index in board:
+        dupe_board.append(index)
 
     return dupe_board
 
